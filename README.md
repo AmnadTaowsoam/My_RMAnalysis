@@ -10,6 +10,8 @@ open Command line
     mkdir documents
     cd documents
     mkdir rmanalysis
+    mkdir rmanalysis_complete
+    mkdir rmanalysis_pending
 ## environment 
 command line:
 
@@ -24,10 +26,12 @@ requirements:
 1. เอาไฟล์ผลวิเคราะห์มาใส่ใน Folder:documents/rmanalysis
 
 ## run Application
-command line:
+command line: จะทำการสร้าง Database_Buffer ก่อนที่จะมีการ Load เข้า Database จริง
 
     python main.py
 
+command line: Load เข้า Database จริง
 
+    python upload.py
     
 

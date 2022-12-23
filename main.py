@@ -1,11 +1,17 @@
 import datetime
-from my_function.rmanalysis import Processing
+from my_function.rmprepare import Prepare
 
-rma = Processing()
+rmap = Prepare()
 
 if __name__=="__main__":
         try:
-            rma.rma_processing()
-            print('Update all rm analysis successfully','(',datetime.datetime.now().strftime('%Y-%m-%d %H:%M'),')')
+            rmap.rma_check_file_data()
+            print('Check file rm analysis successfully','(',datetime.datetime.now().strftime('%Y-%m-%d %H:%M'),')')
         except:
-            print('Update rm analysis error','(',datetime.datetime.now().strftime('%Y-%m-%d %H:%M'),')')
+            print('Check file rm analysis error','(',datetime.datetime.now().strftime('%Y-%m-%d %H:%M'),')')
+            
+        try:
+            rmap.rma_upload_data_buffer()
+            print('rma_upload_data_buffer successfully','(',datetime.datetime.now().strftime('%Y-%m-%d %H:%M'),')')
+        except:
+            print('rma_upload_data_buffer error','(',datetime.datetime.now().strftime('%Y-%m-%d %H:%M'),')')

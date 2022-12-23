@@ -4,7 +4,7 @@ import configparser
 import pandas as pd
 import datetime
 
-class RMDB():
+class RMDBB():
     parser = configparser.ConfigParser()
     parser.read('RMAnalysis.ini')
     SQL_driver = parser['myserv']['SQL_driver']
@@ -27,8 +27,8 @@ class RMDB():
             print('Conection successfully','(',datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),')')
             
     ########################################################################
-    def create_rmanalysis_tbl(self):
-        create_rmanalysis_sql = """CREATE TABLE rmanalysis (
+    def create_rmbuffer_tbl(self):
+        create_rmbuffer_sql = """CREATE TABLE rmbuffer (
             ID int NOT NULL IDENTITY(1,1),
             c_ud varchar(2), 
             c_sample varchar(15), 
@@ -87,18 +87,18 @@ class RMDB():
             """
         try:
             self.cursor = self.conn.cursor()
-            self.cursor.execute(create_rmanalysis_sql)
+            self.cursor.execute(create_rmbuffer_sql)
         except Exception as e:
             self.cursor.rollback()
             print(e)
-            print('create_rmanalysis_sql error')
+            print('create_rmbuffer_sql error')
         else:
-            print('create_rmanalysis_sql successful')
+            print('create_rmbuffer_sql successful')
             self.cursor.commit()
             self.cursor.close() 
             
-    def insert_rmanalysis_tbl(self,data):
-        insert_rmanalysis_sql = """INSERT INTO rmanalysis (
+    def insert_rmbuffer_tbl(self,data):
+        insert_rmbuffer_sql = """INSERT INTO rmbuffer (
             c_ud, 
             c_sample, 
             c_inslots, 
@@ -160,21 +160,21 @@ class RMDB():
         """
         try:
             self.cursor = self.conn.cursor()
-            self.cursor.execute(insert_rmanalysis_sql, data)
+            self.cursor.execute(insert_rmbuffer_sql, data)
         except Exception as e:
             self.cursor.rollback()
             print(e)
-            print('insert_rmanalysis_tbl error')
+            print('insert_rmbuffer_tbl error')
         else:
             self.cursor.commit()
             self.cursor.close()
             
-    def get_rmanalysis_tbl(self):
-        get_rmanalysis_sql = """SELECT * from rmanalysis
+    def get_rmbuffer_tbl(self):
+        get_rmbuffer_sql = """SELECT * from rmbuffer
         """
         try:
             self.cursor = self.conn.cursor()
-            self.cursor.execute(get_rmanalysis_sql)
+            self.cursor.execute(get_rmbuffer_sql)
             data = self.cursor.fetchall()
             data = pd.DataFrame((tuple(t) for t in data))
             data = data.rename(columns={
@@ -236,20 +236,20 @@ class RMDB():
         except Exception as e:
             self.cursor.rollback()
             print(e)
-            print('get_rmanalysis_tbl error')
+            print('get_rmbuffer_tbl error')
         else:
             self.cursor.commit()
             self.cursor.close()
             return  data
         
-    def truncate_rmanalysis_tbl(self):
-        truncate_rmanalysis_sql = """TRUNCATE TABLE rmanalysis"""
+    def truncate_rmbuffer_tbl(self):
+        truncate_rmbuffer_sql = """TRUNCATE TABLE rmbuffer"""
         try:
             self.cursor = self.conn.cursor()
-            self.cursor.execute(truncate_rmanalysis_sql)
+            self.cursor.execute(truncate_rmbuffer_sql)
         except Exception as ex:
             print(ex)
-            print('truncate_rmanalysis error')
+            print('truncate_rmbuffer error')
         else:
             self.cursor.commit()
             self.cursor.close()

@@ -191,9 +191,9 @@ class Prepare():
         except:
             print('Columns change data type error','(',datetime.datetime.now().strftime('%Y-%m-%d %H:%M'),')')
     
-    def update_rmanalysis(self,data_input):
+    def update_rmbuffer(self,input_data):
         try:
-            rma = data_input.copy()
+            rma = input_data.copy()
             for i in range(len(rma)):
                 rmas = rma.values.tolist()
                 rmas = rmas[i][0],rmas[i][1],rmas[i][2],rmas[i][3],rmas[i][4],rmas[i][5],rmas[i][6],rmas[i][7],rmas[i][8],rmas[i][9],rmas[i][10],\
@@ -222,7 +222,7 @@ class Prepare():
                     
                     # Do something with the dataframe here
                     rmanalysis = self.columns_detype_buffer(rmanalysis_df)
-                    self.update_rmanalysis(rmanalysis)
+                    self.update_rmbuffer(rmanalysis)
                     shutil.move("./documents/rmanalysis_pending/"+fname, "./documents/rmanalysis_complete/" + fname)
                     print('\t%s' % fname,':rma_upload_data_buffer Successfully','(',datetime.datetime.now().strftime('%Y-%m-%d %H:%M'),')')
                 

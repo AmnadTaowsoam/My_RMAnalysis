@@ -3,11 +3,11 @@ from my_function.rmanalysis import Processing
 from my_db.dbb import RMDBB
 
 dbb = RMDBB()
-pc = Processing()
+rmpc = Processing()
 
 if __name__=="__main__":
         try:
-            pc.update_rmanalysis()
+            rmpc.update_rmanalysis()
             print('Upload rmanalysis to database successfully','(',datetime.datetime.now().strftime('%Y-%m-%d %H:%M'),')')
         except:
             print('Upload rmanalysis to database error','(',datetime.datetime.now().strftime('%Y-%m-%d %H:%M'),')')

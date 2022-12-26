@@ -85,6 +85,8 @@ class Prepare():
         try:
             data = input_data.replace("'", "")
             data = input_data.replace('"', "")
+            data = data[data['c_material'] !=0]
+            data = data.fillna(0)
             return data
         except:
             print('Columns cleansing error','(',datetime.datetime.now().strftime('%Y-%m-%d %H:%M'),')')

@@ -2,6 +2,7 @@ import os, shutil
 import datetime
 import pandas as pd
 import numpy as np
+import re
 np.set_printoptions(suppress=True)
 
 import warnings
@@ -77,16 +78,25 @@ class Prepare():
                 'c_plant_org'
                 })
             data = data.fillna(0)
+            data[['n_nut1','n_nut2','n_nut3','n_nut4','n_nut5','n_nut6','n_nut7','n_nut8','n_nut9','n_nut10']] = 0.0
             return data
         except:
             print('Columns rename error','(',datetime.datetime.now().strftime('%Y-%m-%d %H:%M'),')')
             
     def columns_cleansing(self, input_data):
         try:
-            data = input_data.replace("'", "")
-            data = input_data.replace('"', "")
-            data = data[data['c_material'] !=0]
-            data = data.fillna(0)
+            data = input_data.copy()
+            col_num = ['n_MOIS','n_ASH','n_PROTEIN','n_FAT','n_FIBER','n_P','n_Ca','n_INSOL','n_NaCl','n_FFA','n_UA','n_KOHPS','n_BRIX',\
+                                    'n_PEPSIN','n_PEPSIN0002','n_NDF','n_ADF','n_ADL','n_ETH','n_T_FAT','n_TVN','n_NH3','n_Starch','n_IV','n_PV',\
+                                    'n_AV','n_Totox','n_p_anisidine','n_Xanthophyll','n_AcInsol','n_Gluten','n_nut1','n_nut2','n_nut3',\
+                                    'n_nut4','n_nut5','n_nut6','n_nut7','n_nut8','n_nut9','n_nut10']
+            data[col_num] = data[col_num].astype(pd.StringDtype())
+
+            chars_to_remove = ['.', '-', '(', ')', '"',' ',"'","' '","''","''"]
+            regular_expression = '[' + re.escape(''.join(chars_to_remove)) + ']'
+            data[col_num] = data[col_num].replace(regular_expression, '0', regex=True)
+            data = data.replace('รอผล', '0')
+            data[col_num] = data[col_num].astype(float)
             return data
         except:
             print('Columns cleansing error','(',datetime.datetime.now().strftime('%Y-%m-%d %H:%M'),')')
@@ -107,6 +117,7 @@ class Prepare():
             data['c_ud'] = np.where(((data['c_material'].str[:2] == 'WG') | (data['c_vendor'] == 0)| (data['c_Batch'] == 0)),'A', data['c_ud'])
             data['c_ud'] = np.where(((data['c_sample'] == 0) | (data['c_inslots'] == 0)),'A', data['c_ud'])
             data['c_inslots'] = np.where((data['c_vendor'] == 0),'Inprocess', data['c_inslots'])
+            data['c_remark'] = data['c_remark'].str[:80]
             return data
         except:
             print('Columns transform data type error','(',datetime.datetime.now().strftime('%Y-%m-%d %H:%M'),')')
@@ -114,7 +125,6 @@ class Prepare():
     def columns_detype(self, input_data):
         try:
             data = input_data.copy()
-            data[['n_nut1','n_nut2','n_nut3','n_nut4','n_nut5','n_nut6','n_nut7','n_nut8','n_nut9','n_nut10']] = 0.0
             col_all = ['c_ud','c_sample','c_inslots','c_vendor','c_material','d_date','c_Batch','n_MOIS','n_ASH','n_PROTEIN',\
                                     'n_FAT','n_FIBER','n_P','n_Ca','n_INSOL','n_NaCl','n_FFA','n_UA','n_KOHPS','n_BRIX','n_PEPSIN','n_PEPSIN0002',\
                                     'n_NDF','n_ADF','n_ADL','n_ETH','n_T_FAT','n_TVN','n_NH3', 'n_Starch','n_IV','n_PV','n_AV','n_Totox',\

@@ -90,13 +90,13 @@ class Prepare():
                                     'n_PEPSIN','n_PEPSIN0002','n_NDF','n_ADF','n_ADL','n_ETH','n_T_FAT','n_TVN','n_NH3','n_Starch','n_IV','n_PV',\
                                     'n_AV','n_Totox','n_p_anisidine','n_Xanthophyll','n_AcInsol','n_Gluten','n_nut1','n_nut2','n_nut3',\
                                     'n_nut4','n_nut5','n_nut6','n_nut7','n_nut8','n_nut9','n_nut10']
-            data[col_num] = data[col_num].astype(pd.StringDtype())
-
+            
             chars_to_remove = ['.', '-', '(', ')', '"',' ',"'","' '","''","''"]
             regular_expression = '[' + re.escape(''.join(chars_to_remove)) + ']'
             data[col_num] = data[col_num].replace(regular_expression, '0', regex=True)
             data = data.replace('รอผล', '0')
-            data[col_num] = data[col_num].astype(float)
+            data = data.replace('ผล', '0')
+            data = data.replace('รอ', '0')
             return data
         except:
             print('Columns cleansing error','(',datetime.datetime.now().strftime('%Y-%m-%d %H:%M'),')')
@@ -141,6 +141,9 @@ class Prepare():
             data['c_inslots'] = data['c_inslots'].str[:11]
             data['c_sample'] = data['c_sample'].str[:11]
             data[col_num] = data[col_num].astype(float)
+            data['c_ud'] = data['c_ud'].replace('0.0', 'A')
+            data['c_remark'] = data['c_remark'].str[:100]
+            data['c_remark'] = data['c_remark'].fillna("X")
             data = data[col_all]
             return data
         except:
@@ -168,7 +171,7 @@ class Prepare():
                         continue
                     print('\t%s' % fname)
                     # Read the Excel file into a dataframe
-                    rmanalysis_df = pd.read_excel(os.path.join(dirName, fname))
+                    rmanalysis_df = pd.read_excel(os.path.join(dirName, fname),sheet_name='Db_Export')
                     # Do something with the dataframe here
                     rmanalysis = self.rma_transform(rmanalysis_df)
                     rmanalysis.to_excel("./documents/rmanalysis_pending/"+'C_' + fname )
@@ -198,6 +201,7 @@ class Prepare():
             data['c_inslots'] = data['c_inslots'].str[:11]
             data['c_sample'] = data['c_sample'].str[:11]
             data[col_num] = data[col_num].astype(float)
+            data['c_remark'] = data['c_remark'].fillna("X")
             data = data[col_all]
             return data
         except:

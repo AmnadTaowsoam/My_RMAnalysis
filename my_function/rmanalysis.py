@@ -26,12 +26,13 @@ class Processing():
     def get_data_rmDB(self):
         data = db.get_rmanalysis_tbl()
         data = data.drop(columns={'ID'})
+        data = data.drop_duplicates()
         return data
     
     def check_exit_DB(self):
         data_a = self.get_data_rmDB()
-        data_a = self.get_data_bufferDB()
-        data = pd.concat([data_a,data_a]).drop_duplicates(keep=False)
+        data_b = self.get_data_bufferDB()
+        data = pd.concat([data_a,data_b]).drop_duplicates(keep=False)
         return data
             
     def update_rmanalysis(self):

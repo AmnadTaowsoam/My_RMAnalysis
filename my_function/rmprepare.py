@@ -171,7 +171,7 @@ class Prepare():
                         continue
                     print('\t%s' % fname)
                     # Read the Excel file into a dataframe
-                    rmanalysis_df = pd.read_excel(os.path.join(dirName, fname),sheet_name='Db_Export')
+                    rmanalysis_df = pd.read_excel(os.path.join(dirName, fname),sheet_name='Sheet1')
                     # Do something with the dataframe here
                     rmanalysis = self.rma_transform(rmanalysis_df)
                     rmanalysis.to_excel("./documents/rmanalysis_pending/"+'C_' + fname )

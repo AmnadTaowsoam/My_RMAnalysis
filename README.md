@@ -1,12 +1,8 @@
 # My_RMAnalysis
 Create Database for RM analysis
 
-## github.com
-open Command line
-
-    git clone https://github.com/AmnadTaowsoam/My_RMAnalysis.git
-
 ## directory
+    mkdir APIs_data
     mkdir documents
     cd documents
     mkdir rmanalysis
